@@ -9,6 +9,12 @@ instance Eq Time where
   (==) (T l)    (T r)    = l == r
   (==) _        _        = False
 
+instance Ord Time where
+  compare  Infinity  Infinity = EQ
+  compare  Infinity (T _)     = GT
+  compare (T _)      Infinity = LT
+  compare (T x)     (T y)     = compare x y
+
 fromTime : Time -> Nat
 fromTime Infinity = Z
 fromTime (T n)    = n
