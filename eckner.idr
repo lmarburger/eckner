@@ -15,10 +15,6 @@ instance Ord Time where
   compare (T _)      Infinity = LT
   compare (T x)     (T y)     = compare x y
 
-fromTime : Time -> Nat
-fromTime Infinity = Z
-fromTime (T n)    = n
-
 Value : Type
 Value = Int
 
