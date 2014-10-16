@@ -30,18 +30,18 @@ Timeseries : Type
 Timeseries = List Observation
 
 myT : Timeseries
-myT = [(T 1,11), (T 3,33), (T 5,55), (T 7,77)]
+myT = [(T 1,11), (T 9, 99), (T 3,33), (T 5,55), (T 7,77)]
 
 mutual
   prev : Timeseries -> Time -> Time
   prev [] _ = T Z  -- I made this up. :shrug:
-  prev os t with (filter (\o => fst o <= t) os)
+  prev os t with (sort $ filter (\o => fst o <= t) os)
     | []      = next os (T Z)
     | (o::os) = fst $ last (o::os)
 
   next : Timeseries -> Time -> Time
   next [] _ = T Z  -- I made this up. :shrug:
-  next os t with (filter (\o => fst o >= t) os)
+  next os t with (sort $ filter (\o => fst o >= t) os)
     | []         = Infinity
     | ((o,_)::_) = o
 
