@@ -21,7 +21,6 @@ Value = Int
 Observation : Type
 Observation = (Time, Value)
 
--- Assumed to be sorted by Time. Should likely be a SortedSet not List.
 Timeseries : Type
 Timeseries = List Observation
 
