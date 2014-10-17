@@ -20,7 +20,7 @@ fromTime Infinity = Z
 fromTime (T n)    = n
 
 Value : Type
-Value = Int
+Value = Float
 
 Observation : Type
 Observation = (Time, Value)
