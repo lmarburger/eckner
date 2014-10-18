@@ -77,3 +77,27 @@ prev os t with (sort $ filter (\o => fst o <= t) os)
 prevTime : Timeseries -> Time -> Time
 prevTime [] _ = T Z
 prevTime os t = fst $ prev os t
+
+||| Definition 2.4: Last-point sampling scheme. Returns the value for the most
+||| recent observed time.
+|||
+||| Examples:
+|||   lastPoint myT (T Z)     --> 11.0 : Float
+|||   lastPoint myT (T 4)     --> 33.0 : Float
+|||   lastPoint myT (T 5)     --> 55.0 : Float
+|||   lastPoint myT Infinity  --> 99.0 : Float
+lastPoint : Timeseries -> Time -> Value
+lastPoint [] _ = 0
+lastPoint os t = snd $ prev os t
+
+||| Definition 2.4: Next-point sampling scheme. Returns the value for the next
+||| available observed time.
+|||
+||| Examples:
+|||   nextPoint myT (T Z)     --> 11.0 : Float
+|||   nextPoint myT (T 4)     --> 55.0 : Float
+|||   nextPoint myT (T 5)     --> 55.0 : Float
+|||   nextPoint myT Infinity  --> 0.0 : Float
+nextPoint : Timeseries -> Time -> Value
+nextPoint [] _ = 0
+nextPoint os t = snd $ next os t
