@@ -2,7 +2,7 @@ module Timeseries
 
 %default total
 
-data Time = T Nat | Infinity
+data Time = T Int | Infinity
 
 instance Eq Time where
   (==) Infinity Infinity = True
@@ -15,12 +15,12 @@ instance Ord Time where
   compare (T _)      Infinity = LT
   compare (T x)     (T y)     = compare x y
 
-fromTime : Time -> Nat
-fromTime Infinity = Z
+fromTime : Time -> Int
+fromTime Infinity = 0
 fromTime (T n)    = n
 
 Value : Type
-Value = Float
+Value = Int
 
 Observation : Type
 Observation = (Time, Value)
@@ -40,7 +40,7 @@ myT = [(T 1,11), (T 9, 99), (T 3,33), (T 5,55), (T 7,77)]
 |||   next myT (T 5)     --> (T 5, 55.0) : (Time, Float)
 |||   next myT Infinity  --> (Infinity, 0.0) : (Time, Float)
 next : Timeseries -> Time -> Observation
-next [] _ = (T Z, 0)  -- I made this up. :shrug:
+next [] _ = (T 0, 0)  -- I made this up. :shrug:
 next os t with (sort $ filter (\o => fst o >= t) os)
   | []     = (Infinity, 0)
   | (o::_) = o
@@ -52,7 +52,7 @@ next os t with (sort $ filter (\o => fst o >= t) os)
 |||   nextTime myT (T Z)     --> T 1 : Time
 |||   nextTime myT Infinity  --> Infinity : Time
 nextTime : Timeseries -> Time -> Time
-nextTime [] _ = T Z
+nextTime [] _ = T 0
 nextTime os t = fst $ next os t
 
 ||| Definition 2.3: Most recent observed time.
@@ -63,9 +63,9 @@ nextTime os t = fst $ next os t
 |||   prev myT (T 5)     --> (T 5, 55.0) : (Time, Float)
 |||   prev myT Infinity  --> (T 9, 99.0) : (Time, Float)
 prev : Timeseries -> Time -> Observation
-prev [] _ = (T Z, 0)  -- I made this up. :shrug:
+prev [] _ = (T 0, 0)  -- I made this up. :shrug:
 prev os t with (sort $ filter (\o => fst o <= t) os)
-  | []      = next os (T Z)
+  | []      = next os (T 0)
   | (o::os) = last (o::os)
 
 ||| Examples:
@@ -75,7 +75,7 @@ prev os t with (sort $ filter (\o => fst o <= t) os)
 |||   prevTime myT (T Z)     --> T 1 : Time
 |||   prevTime myT Infinity  --> T 9 : Time
 prevTime : Timeseries -> Time -> Time
-prevTime [] _ = T Z
+prevTime [] _ = T 0
 prevTime os t = fst $ prev os t
 
 ||| Definition 2.4: Last-point sampling scheme. Returns the value for the most
