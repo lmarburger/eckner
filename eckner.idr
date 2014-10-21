@@ -27,7 +27,7 @@ Timeseries : Type
 Timeseries = List Observation
 
 myT : Timeseries
-myT = [(T 1,11), (T 9, 99), (T 3,33), (T 5,55), (T 7,77)]
+myT = [(T 1,1), (T 9,9), (T 3,3), (T 5,5), (T 7,7)]
 
 
 ||| Definition 2.3: Next available observed time.
