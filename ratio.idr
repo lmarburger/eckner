@@ -1,10 +1,8 @@
 module Ratio
 
-import Data.ZZ
-
 %default total
 
-data Ratio = (&) ZZ ZZ
+data Ratio = (&) Integer Integer
 infixr 10 &
 
 ||| Take the absolute value of a `Ratio`
@@ -35,7 +33,7 @@ instance Ord Ratio where
   compare (n1 & d1) (n2 & d2) = compare (n1 * d2) (n2 * d1)
 
 fromInt : Integer -> Ratio
-fromInt n = (ZZ.fromInt n) & 1
+fromInt n = n & 1
 
 instance Num Ratio where
   (+) = plusRatio

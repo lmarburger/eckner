@@ -119,8 +119,8 @@ mutual
   -- way that Idris doesn't think it's an infinite loop.
   partial wxt : Timeseries -> Time -> Ratio
   wxt os (T t)    = num & denom where
-    num : ZZ
-    num = fromInt $ t - (lastPoint os (T t))
+    num : Integer
+    num = t - (lastPoint os (T t))
 
-    denom : ZZ
-    denom = fromInt $ (nextPoint os (T t)) - (lastPoint os (T t))
+    denom : Integer
+    denom = (nextPoint os (T t)) - (lastPoint os (T t))
