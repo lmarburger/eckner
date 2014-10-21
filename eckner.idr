@@ -33,10 +33,10 @@ myT = [(T 1,1), (T 9,9), (T 3,3), (T 5,5), (T 7,7)]
 ||| Definition 2.3: Next available observed time.
 |||
 ||| Examples:
-|||   next myT (T Z)     --> (T 1, 11.0) : (Time, Float)
-|||   next myT (T 4)     --> (T 5, 55.0) : (Time, Float)
-|||   next myT (T 5)     --> (T 5, 55.0) : (Time, Float)
-|||   next myT Infinity  --> (Infinity, 0.0) : (Time, Float)
+|||   next myT (T 0)     --> (T 1, 1) : (Time, Integer)
+|||   next myT (T 4)     --> (T 5, 5) : (Time, Integer)
+|||   next myT (T 5)     --> (T 5, 5) : (Time, Integer)
+|||   next myT Infinity  --> (Infinity, 0) : (Time, Integer)
 next : Timeseries -> Time -> Observation
 next [] _ = (T 0, 0)  -- I made this up. :shrug:
 next os t with (sort $ filter (\o => fst o >= t) os)
@@ -47,7 +47,7 @@ next os t with (sort $ filter (\o => fst o >= t) os)
 |||   nextTime myT (T 4)     --> T 5 : Time
 |||   nextTime myT (T 5)     --> T 5 : Time
 |||   nextTime myT (T 6)     --> T 7 : Time
-|||   nextTime myT (T Z)     --> T 1 : Time
+|||   nextTime myT (T 0)     --> T 1 : Time
 |||   nextTime myT Infinity  --> Infinity : Time
 nextTime : Timeseries -> Time -> Time
 nextTime [] _ = T 0
@@ -56,10 +56,10 @@ nextTime os t = fst $ next os t
 ||| Definition 2.3: Most recent observed time.
 |||
 ||| Examples:
-|||   prev myT (T Z)     --> (T 1, 11.0) : (Time, Float)
-|||   prev myT (T 4)     --> (T 3, 33.0) : (Time, Float)
-|||   prev myT (T 5)     --> (T 5, 55.0) : (Time, Float)
-|||   prev myT Infinity  --> (T 9, 99.0) : (Time, Float)
+|||   prev myT (T 0)     --> (T 1, 1) : (Time, Integer)
+|||   prev myT (T 4)     --> (T 3, 3) : (Time, Integer)
+|||   prev myT (T 5)     --> (T 5, 5) : (Time, Integer)
+|||   prev myT Infinity  --> (T 9, 9) : (Time, Integer)
 prev : Timeseries -> Time -> Observation
 prev [] _ = (T 0, 0)  -- I made this up. :shrug:
 prev os t with (sort $ filter (\o => fst o <= t) os)
@@ -70,7 +70,7 @@ prev os t with (sort $ filter (\o => fst o <= t) os)
 |||   prevTime myT (T 4)     --> T 3 : Time
 |||   prevTime myT (T 5)     --> T 5 : Time
 |||   prevTime myT (T 6)     --> T 5 : Time
-|||   prevTime myT (T Z)     --> T 1 : Time
+|||   prevTime myT (T 0)     --> T 1 : Time
 |||   prevTime myT Infinity  --> T 9 : Time
 prevTime : Timeseries -> Time -> Time
 prevTime [] _ = T 0
@@ -80,10 +80,10 @@ prevTime os t = fst $ prev os t
 ||| recent observed time.
 |||
 ||| Examples:
-|||   lastPoint myT (T Z)     --> 11.0 : Float
-|||   lastPoint myT (T 4)     --> 33.0 : Float
-|||   lastPoint myT (T 5)     --> 55.0 : Float
-|||   lastPoint myT Infinity  --> 99.0 : Float
+|||   lastPoint myT (T 0)     --> 1 : Integer
+|||   lastPoint myT (T 4)     --> 3 : Integer
+|||   lastPoint myT (T 5)     --> 5 : Integer
+|||   lastPoint myT Infinity  --> 9 : Integer
 lastPoint : Timeseries -> Time -> Value
 lastPoint [] _ = 0
 lastPoint os t = snd $ prev os t
@@ -92,10 +92,10 @@ lastPoint os t = snd $ prev os t
 ||| available observed time.
 |||
 ||| Examples:
-|||   nextPoint myT (T Z)     --> 11.0 : Float
-|||   nextPoint myT (T 4)     --> 55.0 : Float
-|||   nextPoint myT (T 5)     --> 55.0 : Float
-|||   nextPoint myT Infinity  --> 0.0 : Float
+|||   nextPoint myT (T 0)     --> 1 : Integer
+|||   nextPoint myT (T 4)     --> 5 : Integer
+|||   nextPoint myT (T 5)     --> 5 : Integer
+|||   nextPoint myT Infinity  --> 0 : Integer
 nextPoint : Timeseries -> Time -> Value
 nextPoint [] _ = 0
 nextPoint os t = snd $ next os t
