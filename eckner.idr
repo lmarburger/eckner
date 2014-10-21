@@ -1,8 +1,10 @@
 module Timeseries
 
+import Ratio
+
 %default total
 
-data Time = T Int | Infinity
+data Time = T Integer | Infinity
 
 instance Eq Time where
   (==) Infinity Infinity = True
@@ -20,7 +22,7 @@ fromTime Infinity = 0
 fromTime (T n)    = n
 
 Value : Type
-Value = Int
+Value = Integer
 
 Observation : Type
 Observation = (Time, Value)
@@ -101,3 +103,28 @@ lastPoint os t = snd $ prev os t
 nextPoint : Timeseries -> Time -> Value
 nextPoint [] _ = 0
 nextPoint os t = snd $ next os t
+
+mutual
+
+  ||| Definition 2.4: Linear interpolation sampling scheme. Returns the value for
+  ||| the linearly interpolated time.
+  |||
+  ||| Examples:
+  |||   linearInerpolation myT (T 0)  --> Pos 1  & Pos 1 : Ratio
+  |||   linearInerpolation myT (T 4)  --> Pos 16 & Pos 4 : Ratio
+  |||   linearInerpolation myT (T 5)  --> Pos 5  & Pos 1 : Ratio
+  |||   linearInerpolation myT (T 6)  --> Pos 24 & Pos 4 : Ratio
+  partial linearInerpolation : Timeseries -> Time -> Ratio
+  linearInerpolation os t = p + n where
+    p = (1 - (wxt os t)) * (fromInt (lastPoint os t))
+    n = (wxt os t) * (fromInt (nextPoint os t))
+
+  -- Not handling the Infinity case because I don't know how to write it in a
+  -- way that Idris doesn't think it's an infinite loop.
+  partial wxt : Timeseries -> Time -> Ratio
+  wxt os (T t)    = num & denom where
+    num : ZZ
+    num = fromInt $ t - (lastPoint os (T t))
+
+    denom : ZZ
+    denom = fromInt $ (nextPoint os (T t)) - (lastPoint os (T t))
